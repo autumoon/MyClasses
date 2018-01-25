@@ -1,5 +1,5 @@
 /* ******* MfcStrFile.h **********
-********* ×Ö·û´®¡¢ÎÄ¼ş¡¢Ä¿Â¼²Ù×÷º¯ÊıÉùÃ÷ ********** */
+********* å­—ç¬¦ä¸²ã€æ–‡ä»¶ã€ç›®å½•æ“ä½œå‡½æ•°å£°æ˜ ********** */
 
 /* author: autumoon */
 
@@ -9,24 +9,24 @@
 #pragma comment(linker,"/manifestdependency:\"type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='x86' publicKeyToken='6595b64144ccf1df' language='*'\"")
 #endif
 
-#include <afxdlgs.h>        //´ò¿ªÎÄ¼ş
-#include <ShlObj.h>         //ä¯ÀÀÎÄ¼ş¼Ğ
+#include <afxdlgs.h>        //æ‰“å¼€æ–‡ä»¶
+#include <ShlObj.h>         //æµè§ˆæ–‡ä»¶å¤¹
 #include <string>
 
 class CMfcStrFile
 {
 public:
-	static std::string CString2string(const CString& strCstring);												//Ê¹ÓÃÕâ¸öÔò²»ĞèÒª¿¼ÂÇÄÚ´æÊÍ·ÅµÄÎÊÌâ
+	static std::string CString2string(const CString& strCstring);												//ä½¿ç”¨è¿™ä¸ªåˆ™ä¸éœ€è¦è€ƒè™‘å†…å­˜é‡Šæ”¾çš„é—®é¢˜
 
-	static CString BrowseDir(const CString& strTips = CString("ÇëÑ¡ÔñÎÄ¼ş¼Ğ"));                                //ä¯ÀÀÒ»¸öÎÄ¼ş¼Ğ
-	static CString BrowseDirNew(const CString& strTips = CString("ÇëÑ¡ÔñÎÄ¼ş¼Ğ"));                             //ä¯ÀÀÒ»¸öÎÄ¼ş¼Ğ£¬´øĞÂ½¨°´Å¥
+	static CString BrowseDir(const CString& strTips = CString("è¯·é€‰æ‹©æ–‡ä»¶å¤¹"));                                //æµè§ˆä¸€ä¸ªæ–‡ä»¶å¤¹
+	static CString BrowseDirNew(const CString& strTips = CString("è¯·é€‰æ‹©æ–‡ä»¶å¤¹"));                             //æµè§ˆä¸€ä¸ªæ–‡ä»¶å¤¹ï¼Œå¸¦æ–°å»ºæŒ‰é’®
 	static CString OpenFile();
 	static CString OpenSuffixFile(const std::string& strSuffix);
 	static CString OpenSuffixFile(const int& nSuffix, ...);
-	static CString SaveSuffixFile(const std::string& strSuffix);
+	static CString SaveSuffixFile(const std::string& strSuffix, const std::string& strDefaultName = "autumoon");
 	static size_t Split(const CString& str, CStringArray& Arr, const char& ch = ',');
 	static size_t Split(const CString& str, CStringArray& Arr, const CString& pattern = _T(","));
 
 private:
-	static inline char* CStringToChar(const CString& strCstring);														//ÄÚ²¿ÉêÇëÁËÄÚ´æ¿Õ¼ä£¬×¢ÒâÊÍ·Å
+	static inline char* CStringToChar(const CString& strCstring);														//å†…éƒ¨ç”³è¯·äº†å†…å­˜ç©ºé—´ï¼Œæ³¨æ„é‡Šæ”¾
 };
