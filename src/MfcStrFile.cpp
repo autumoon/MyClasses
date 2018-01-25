@@ -14,17 +14,17 @@ char* CMfcStrFile::CStringToChar(const CString& strCstring)
 {
 	CString strBak(strCstring);
 #ifdef _UNICODE
-	setlocale(LC_CTYPE, "chs");//Éè¶¨Ö§³ÖÖĞÎÄÂ·¾¶
-	wchar_t *pWChar = strBak.GetBuffer(); //»ñÈ¡strµÄ¿í×Ö·ûÓÃÊı×é±£´æ  
+	setlocale(LC_CTYPE, "chs");//è®¾å®šæ”¯æŒä¸­æ–‡è·¯å¾„
+	wchar_t *pWChar = strBak.GetBuffer(); //è·å–strçš„å®½å­—ç¬¦ç”¨æ•°ç»„ä¿å­˜  
 	strBak.ReleaseBuffer();
-	int nLen = strBak.GetLength(); //»ñÈ¡strµÄ×Ö·ûÊı  
+	int nLen = strBak.GetLength(); //è·å–strçš„å­—ç¬¦æ•°  
 	char *pChar = new char[nLen * 2 + 1];
 	memset(pChar, 0, nLen * 2 + 1);
 	size_t i;
-	size_t rtnVal = wcstombs_s(&i, pChar, nLen * 2 + 1, pWChar, _TRUNCATE); //¿í×Ö·û×ª»»Îª¶à×Ö½Ú×Ö·û
-	setlocale(LC_ALL, "C"); //»¹Ô­ÇøÓòÉè¶¨
+	size_t rtnVal = wcstombs_s(&i, pChar, nLen * 2 + 1, pWChar, _TRUNCATE); //å®½å­—ç¬¦è½¬æ¢ä¸ºå¤šå­—èŠ‚å­—ç¬¦
+	setlocale(LC_ALL, "C"); //è¿˜åŸåŒºåŸŸè®¾å®š
 
-	return pChar; //×¢Òâ´ËÄÚ´æ²¢Î´ÊÍ·Å
+	return pChar; //æ³¨æ„æ­¤å†…å­˜å¹¶æœªé‡Šæ”¾
 #else
 	char *pDst = new char[strBak.GetLength() + 1];
 	strcpy(pDst, strBak);
@@ -33,7 +33,7 @@ char* CMfcStrFile::CStringToChar(const CString& strCstring)
 #endif // _UNICODE
 }
 
-CString CMfcStrFile::BrowseDir(const CString& strTips/* = CString("ÇëÑ¡ÔñÎÄ¼ş¼Ğ")*/)
+CString CMfcStrFile::BrowseDir(const CString& strTips/* = CString("è¯·é€‰æ‹©æ–‡ä»¶å¤¹")*/)
 {
 	CString szFileFolderPath;
 	TCHAR pszPath[MAX_PATH];
@@ -58,7 +58,7 @@ CString CMfcStrFile::BrowseDir(const CString& strTips/* = CString("ÇëÑ¡ÔñÎÄ¼ş¼Ğ"
 	}
 }
 
-CString CMfcStrFile::BrowseDirNew(const CString& strTips/* = CString("ÇëÑ¡ÔñÎÄ¼ş¼Ğ")*/)
+CString CMfcStrFile::BrowseDirNew(const CString& strTips/* = CString("è¯·é€‰æ‹©æ–‡ä»¶å¤¹")*/)
 {
 	CString szFileFolderPath;
 	TCHAR pszPath[MAX_PATH];
@@ -85,7 +85,7 @@ CString CMfcStrFile::BrowseDirNew(const CString& strTips/* = CString("ÇëÑ¡ÔñÎÄ¼ş
 
 CString CMfcStrFile::OpenFile()
 {
-	CFileDialog dlg(TRUE, NULL, NULL, OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT, _T("ËùÓĞÎÄ¼ş(*.*)|*.*||"));
+	CFileDialog dlg(TRUE, NULL, NULL, OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT, _T("æ‰€æœ‰æ–‡ä»¶(*.*)|*.*||"));
 
 	CString szFileName("");
 
@@ -107,7 +107,7 @@ CString CMfcStrFile::OpenSuffixFile(const std::string& strSuffix)
 		strSuffixBak.erase(0, 1);
 	}
 
-	CFileDialog dlg(TRUE, NULL, NULL, OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT, CString((strSuffixBak + "ÎÄ¼ş£¨*." + strSuffixBak + ")|*." + strSuffixBak + "|ËùÓĞÎÄ¼ş(*.*)|*.*||").c_str()));
+	CFileDialog dlg(TRUE, NULL, NULL, OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT, CString((strSuffixBak + "æ–‡ä»¶ï¼ˆ*." + strSuffixBak + ")|*." + strSuffixBak + "|æ‰€æœ‰æ–‡ä»¶(*.*)|*.*||").c_str()));
 
 	CString szFileName("");
 
@@ -133,7 +133,7 @@ CString CMfcStrFile::OpenSuffixFile(const int& nSuffix, ...)
 	}
 	va_end(argp);
 
-	//´ò¿ª¶àÖÖÀàĞÍ
+	//æ‰“å¼€å¤šç§ç±»å‹
 	for (int i = 0; i < nSuffix; i++)
 	{
 		if (arrSuffixs[i].Left(1) == '.')
@@ -146,10 +146,10 @@ CString CMfcStrFile::OpenSuffixFile(const int& nSuffix, ...)
 	CString strTemp("");
 	for (int i = 0; i < nSuffix; i++)
 	{
-		strTemp += arrSuffixs[i] + "ÎÄ¼ş£¨*." + arrSuffixs[i] + ")|*." + arrSuffixs[i] + "|";
+		strTemp += arrSuffixs[i] + "æ–‡ä»¶ï¼ˆ*." + arrSuffixs[i] + ")|*." + arrSuffixs[i] + "|";
 	}
 
-	CFileDialog dlg(TRUE, NULL, NULL, OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT, strTemp + "ËùÓĞÎÄ¼ş(*.*)|*.*||");
+	CFileDialog dlg(TRUE, NULL, NULL, OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT, strTemp + "æ‰€æœ‰æ–‡ä»¶(*.*)|*.*||");
 
 	CString szFileName("");
 
@@ -161,7 +161,7 @@ CString CMfcStrFile::OpenSuffixFile(const int& nSuffix, ...)
 	return szFileName;
 }
 
-CString CMfcStrFile::SaveSuffixFile(const std::string& strSuffix)
+CString CMfcStrFile::SaveSuffixFile(const std::string& strSuffix, const std::string& strDefaultName/* = "autumoon"*/)
 {
 	CString sSuffix(strSuffix.c_str()), strFilePath;
 	size_t nIndex = strSuffix.rfind('.');
@@ -172,8 +172,8 @@ CString CMfcStrFile::SaveSuffixFile(const std::string& strSuffix)
 
 	if (sSuffix.GetLength() != 0)
 	{
-		CString strTemp = sSuffix + "ÎÄ¼ş£¨*." + sSuffix + ")|*." + sSuffix + "|";
-		CFileDialog dlg(FALSE, CString(strSuffix.c_str()), NULL, OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT, strTemp);
+		CString strTemp = sSuffix + "æ–‡ä»¶ï¼ˆ*." + sSuffix + ")|*." + sSuffix + "|";
+		CFileDialog dlg(FALSE, CString(strSuffix.c_str()), CString(strDefaultName.c_str()), OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT, strTemp);
 
 		if (dlg.DoModal() == IDOK)
 		{
@@ -187,7 +187,7 @@ CString CMfcStrFile::SaveSuffixFile(const std::string& strSuffix)
 size_t CMfcStrFile::Split(const CString& str, CStringArray& Arr, const char& ch /*= ','*/)
 {
 	CString strTmp(str);
-	//Îª·½±ã´¦Àí£¬Ìí¼ÓÒ»¸öch
+	//ä¸ºæ–¹ä¾¿å¤„ç†ï¼Œæ·»åŠ ä¸€ä¸ªch
 	strTmp += ch;
 	int nFindposi  = strTmp.Find(ch);
 	while( nFindposi != std::string::npos)
@@ -207,7 +207,7 @@ size_t CMfcStrFile::Split(const CString& str, CStringArray& Arr, const CString& 
 {
 	CString strBak(str);
 	int pos = -1;
-	//À©Õ¹×Ö·û´®ÒÔ·½±ã²Ù×÷
+	//æ‰©å±•å­—ç¬¦ä¸²ä»¥æ–¹ä¾¿æ“ä½œ
 	strBak += pattern;
 	int size = strBak.GetLength();
 
