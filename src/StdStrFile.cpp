@@ -34,7 +34,7 @@ std::string CStdStr::AddSlashIfNeeded(const std::string& strDir, const char& cDi
 	}
 	else
 	{
-		//¿ÉÄÜÊÇ¿Õ×Ö·û
+		//å¯èƒ½æ˜¯ç©ºå­—ç¬¦
 		return strDir;
 	}
 
@@ -282,7 +282,7 @@ std::string CStdStr::ToUpperLower(const std::string& strOri, const bool& bToLowe
 
 	if (bToLower)
 	{
-		//È«²¿×ª»»ÎªĞ¡Ğ´
+		//å…¨éƒ¨è½¬æ¢ä¸ºå°å†™
 		while(szDst[++i])
 		{
 			szDst[i] = tolower(szDst[i]);
@@ -290,7 +290,7 @@ std::string CStdStr::ToUpperLower(const std::string& strOri, const bool& bToLowe
 	}
 	else
 	{
-		//È«²¿×ª»»Îª´óĞ´
+		//å…¨éƒ¨è½¬æ¢ä¸ºå¤§å†™
 		while(szDst[++i])
 		{
 			szDst[i] = toupper(szDst[i]);
@@ -310,7 +310,7 @@ std::vector<std::string> CStdStr::Split(const std::string& str, const std::strin
 	std::string strBak(str);
 	std::string::size_type pos = std::string::npos;
 	std::vector<std::string> result;
-	//À©Õ¹×Ö·û´®ÒÔ·½±ã²Ù×÷
+	//æ‰©å±•å­—ç¬¦ä¸²ä»¥æ–¹ä¾¿æ“ä½œ
 	strBak += pattern;
 	size_t size = strBak.size();
 
@@ -373,6 +373,14 @@ bool CStdDir::CreateDir(const std::string& strDir, const char& cDir/* = '\\'*/)
 
 	str1 = strDir;
 	str2 = str1.substr( 0, 2 );
+	if (str1.length() > 3)
+	{
+		str1 = str1.substr( 3, str1.size() );
+	}
+	else
+	{
+		return true;
+	}
 	str1 = str1.substr( 3, str1.size() );
 
 	while( m >= 0 )
@@ -380,19 +388,19 @@ bool CStdDir::CreateDir(const std::string& strDir, const char& cDir/* = '\\'*/)
 		m = int(str1.find(cDir));
 
 		str2 += cDir + str1.substr( 0, m );    
-		n = _access( str2.c_str(), 0 ); //ÅĞ¶Ï¸ÃÄ¿Â¼ÊÇ·ñ´æÔÚ
+		n = _access( str2.c_str(), 0 ); //åˆ¤æ–­è¯¥ç›®å½•æ˜¯å¦å­˜åœ¨
 		if( n == -1 )
 		{
 			if (_mkdir( str2.c_str()) != 0)
 			{
-				//´´½¨Ê§°Ü
+				//åˆ›å»ºå¤±è´¥
 				return false;
 			}
 		}
 
 		str1 = str1.substr( m+1, str1.size() );
 	}
-	//´´½¨³É¹¦
+	//åˆ›å»ºæˆåŠŸ
 	return true;
 }
 
@@ -411,19 +419,19 @@ bool CStdFile::CompareFileDistinct(const std::string strLeftFile, const std::str
 	__int64 nSizel = GetFileSize(strLeftFile);
 	__int64 nSizer = GetFileSize(strRightFile);
 
-	//ÎÄ¼ş´óĞ¡²»Í¬£¬Ö±½Ó·µ»Øfalse
+	//æ–‡ä»¶å¤§å°ä¸åŒï¼Œç›´æ¥è¿”å›false
 	if (nSizel != nSizer)
 	{
 		return false;
 	}
 
-	//ÎÄ¼ş´óĞ¡ÏàÍ¬µÄÊ±ºò£¬Öğ¸ö×Ö½Ú±È½Ï
+	//æ–‡ä»¶å¤§å°ç›¸åŒçš„æ—¶å€™ï¼Œé€ä¸ªå­—èŠ‚æ¯”è¾ƒ
 	int chl = -1, chr = -1;
 	FILE* fpl = nullptr, *fpr = nullptr;
 	errno_t erl = fopen_s(&fpl, strLeftFile.c_str(),"rb");
 	errno_t err = fopen_s(&fpr, strRightFile.c_str(),"rb");
 
-	//ÈÎÒâÎÄ¼şÎŞ·¨´ò¿ªÔò·µ»Øfalse
+	//ä»»æ„æ–‡ä»¶æ— æ³•æ‰“å¼€åˆ™è¿”å›false
 	if (erl != 0 || erl != 0)
 	{
 		return false;
@@ -443,9 +451,15 @@ bool CStdFile::CompareFileDistinct(const std::string strLeftFile, const std::str
 	return true;
 }
 
-bool CStdFile::CopyAFile(const std::string& strSrcFileName, std::string& strDstFileName, const bool& bFailIfExists)
+bool CStdFile::CopyAFile(const std::string& strSrcFileName, const std::string& strDstFileName, const bool& bFailIfExists)
 {
-	//Èç¹ûÄ¿±êÄ¿Â¼²»´æÔÚ£¬Ôò´´½¨Ä¿Â¼
+	//å¦‚æœæºæ–‡ä»¶å’Œç›®æ ‡æ–‡ä»¶ç›¸åŒï¼Œåˆ™ç›´æ¥è¿”å›true
+	if (strSrcFileName == strDstFileName)
+	{
+		return true;
+	}
+	
+	//å¦‚æœç›®æ ‡ç›®å½•ä¸å­˜åœ¨ï¼Œåˆ™åˆ›å»ºç›®å½•
 	std::string strDir = CStdStr::GetDirOfFile(strDstFileName);
 	if (CStdDir::CreateDir(strDir) == false)
 	{
@@ -454,8 +468,8 @@ bool CStdFile::CopyAFile(const std::string& strSrcFileName, std::string& strDstF
 
 	std::ifstream in;
 	std::ofstream out;
-	in.open(strSrcFileName, std::ios::binary);//´ò¿ªÔ´ÎÄ¼ş
-	if (in.fail())//´ò¿ªÔ´ÎÄ¼şÊ§°Ü
+	in.open(strSrcFileName, std::ios::binary);//æ‰“å¼€æºæ–‡ä»¶
+	if (in.fail())//æ‰“å¼€æºæ–‡ä»¶å¤±è´¥
 	{
 		in.close();
 		out.close();
@@ -467,15 +481,15 @@ bool CStdFile::CopyAFile(const std::string& strSrcFileName, std::string& strDstF
 		in.close();
 		return false;
 	}
-	out.open(strDstFileName, std::ios::binary);//´´½¨Ä¿±êÎÄ¼ş
-	if (out.fail())//´´½¨ÎÄ¼şÊ§°Ü
+	out.open(strDstFileName, std::ios::binary);//åˆ›å»ºç›®æ ‡æ–‡ä»¶
+	if (out.fail())//åˆ›å»ºæ–‡ä»¶å¤±è´¥
 	{
 		out.close();
 		in.close();
 		return false;
 	}
 
-	//¸´ÖÆÎÄ¼ş
+	//å¤åˆ¶æ–‡ä»¶
 	out << in.rdbuf();
 	out.close();
 	in.close();
@@ -489,9 +503,9 @@ size_t CStdFile::ParseTXTFile(const std::string& strFilePath, std::list<std::str
 	std::ifstream in(strFilePath);
 	std::string line;
 
-	if (in) // ÓĞ¸ÃÎÄ¼ş  
+	if (in) // æœ‰è¯¥æ–‡ä»¶  
 	{
-		while (getline(in, line)) // lineÖĞ²»°üÀ¨Ã¿ĞĞµÄ»»ĞĞ·û  
+		while (getline(in, line)) // lineä¸­ä¸åŒ…æ‹¬æ¯è¡Œçš„æ¢è¡Œç¬¦  
 		{
 			lContentInFile.push_back(line);
 		}
@@ -507,9 +521,9 @@ size_t CStdFile::ParseTXTFile(const std::string& strFilePath, std::vector<std::s
 	std::ifstream in(strFilePath);
 	std::string line;
 
-	if (in) // ÓĞ¸ÃÎÄ¼ş  
+	if (in) // æœ‰è¯¥æ–‡ä»¶  
 	{
-		while (getline(in, line)) // lineÖĞ²»°üÀ¨Ã¿ĞĞµÄ»»ĞĞ·û  
+		while (getline(in, line)) // lineä¸­ä¸åŒ…æ‹¬æ¯è¡Œçš„æ¢è¡Œç¬¦  
 		{
 			vContentInFile.push_back(line);
 		}
