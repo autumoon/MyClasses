@@ -3,13 +3,13 @@
 #include <string>
 #include <vector>
 #include <sstream>
-#include <direct.h>		//_mkdirº¯ÊıµÄÍ·ÎÄ¼ş
+#include <direct.h>		//_mkdirå‡½æ•°çš„å¤´æ–‡ä»¶
 #include <io.h>
 
 class CStdStr
 {
 public:
-	//×Ö·û²Ù×÷
+	//å­—ç¬¦æ“ä½œ
 	static bool IsFileContainsDir(const std::string& strFile, const std::string& strDir);
 	static bool IsFilesContainsDir(const std::vector<std::string>& vFiles, const std::string& strDir);
 	static std::string AddSlashIfNeeded(const std::string& strDir, const char& cDir = '\\');
@@ -43,7 +43,7 @@ public:
 class CStdFile
 {
 public:
-	//ÎÄ¼ş²Ù×÷
+	//æ–‡ä»¶æ“ä½œ
 	static bool CompareFileDistinct(const std::string strLeftFile, const std::string strRightFile);
 	static bool CopyAFile(const std::string& strSrcFileName, std::string& strDstFileName, const bool& bFailIfExists);
 	static bool IfAccessFile(const std::string& strFilePath);
@@ -72,18 +72,18 @@ public:
 public:
 	template <class T>
 	static bool DelPointerSafely(T*& pPointer, const bool& bArray = false);
-	//Èç¹ûÊÇ½á¹¹Ìå»òÕßÀà£¬×Ô´ø¹¹Ôìº¯Êı£¬ÔòbIniZero±ØĞëÎªfalse£¬·ñÔò¹¹Ôìº¯ÊıÊ§Ğ§
+	//å¦‚æœæ˜¯ç»“æ„ä½“æˆ–è€…ç±»ï¼Œè‡ªå¸¦æ„é€ å‡½æ•°ï¼Œåˆ™bIniZeroå¿…é¡»ä¸ºfalseï¼Œå¦åˆ™æ„é€ å‡½æ•°å¤±æ•ˆ
 	template <class T>
 	static bool NewSafely(T*& pPointer, const size_t& nSize = 1, const bool& bIniZero = false);
 	template <class T>
 	static bool VectorContains(const std::vector<T>& vTs, const T& value);
-	//nStrictSeq = -2»·ĞÎÄæÏòÑÏ¸ñ°üº¬,-1ÄæÏòÑÏ¸ñ°üº¬£¬0»òÕßÆäËûÖµ²»½²¾¿Ë³Ğò£¬1ÕıÏòÑÏ¸ñ°üº¬£¬2»·ĞÎÕıÏòÑÏ¸ñ°üº¬
+	//nStrictSeq = -2ç¯å½¢é€†å‘ä¸¥æ ¼åŒ…å«,-1é€†å‘ä¸¥æ ¼åŒ…å«ï¼Œ0æˆ–è€…å…¶ä»–å€¼ä¸è®²ç©¶é¡ºåºï¼Œ1æ­£å‘ä¸¥æ ¼åŒ…å«ï¼Œ2ç¯å½¢æ­£å‘ä¸¥æ ¼åŒ…å«
 	template <class T>
 	static bool VectorContains(const std::vector<T>& vTsSum, const std::vector<T>& vTsPart, const VectorContainFlag& nStrictSeq = eNoSeq);
 	template <class T>
 	static int VectorFind(const std::vector<T>& vTs, const T& value, bool bPositiveGoing = true);
 	template <class T>
-	static int ConvertFromString(T &value, const std::string &s);
+	static void* CStdTpl::ConvertFromString(T &value, const std::string &s)
 	template <class T>
 	static std::string ConvertToString(T value);
 
@@ -94,7 +94,7 @@ private:
 	static bool VectorContainsStrictCircle(const std::vector<T>& vTsSum, const std::vector<T>& vTsPart, bool bPositiveGoing = true);
 };
 
-/***********************ÄÚÁª»òÕßÄ£°åÊµÏÖ***********************/
+/***********************å†…è”æˆ–è€…æ¨¡æ¿å®ç°***********************/
 inline bool CStdDir::IfAccessDir(const std::string& strDirPath)
 {
 	return _access(strDirPath.c_str(), 0) == 0 && !CStdFile::IfAccessFile(strDirPath);
@@ -154,7 +154,7 @@ bool CStdTpl::VectorContains(const std::vector<T>& vTsSum, const std::vector<T>&
 {
 	if (vTsPart.size() == 0)
 	{
-		//¿Õ¼¯ÊÇÈÎºÎ¼¯ºÏµÄ×Ó¼¯
+		//ç©ºé›†æ˜¯ä»»ä½•é›†åˆçš„å­é›†
 		return true;
 	}
 
@@ -164,11 +164,11 @@ bool CStdTpl::VectorContains(const std::vector<T>& vTsSum, const std::vector<T>&
 		return VectorContainsStrictCircle(vTsSum, vTsPart, false);
 		//break;
 	case eReverseContain:
-		//Èç¹ûÅĞ¶Ï±ØĞëÑÏ¸ñ°´ÕÕË³Ğò°üº¬
+		//å¦‚æœåˆ¤æ–­å¿…é¡»ä¸¥æ ¼æŒ‰ç…§é¡ºåºåŒ…å«
 		return VectorContainsStrict(vTsSum, vTsPart, false);
 		//break;
 	case eSequenceContain:
-		//Èç¹ûÅĞ¶Ï±ØĞëÑÏ¸ñ°´ÕÕË³Ğò°üº¬
+		//å¦‚æœåˆ¤æ–­å¿…é¡»ä¸¥æ ¼æŒ‰ç…§é¡ºåºåŒ…å«
 		return VectorContainsStrict(vTsSum, vTsPart, true);
 		//break;
 	case eCircleSequenceContain:
@@ -197,17 +197,17 @@ inline bool CStdTpl::VectorContainsStrict(const std::vector<T>& vTsSum, const st
 {
 	if (vTsPart.size() == 0)
 	{
-		//¿Õ¼¯ÊÇÈÎºÎ¼¯ºÏµÄ×Ó¼¯
+		//ç©ºé›†æ˜¯ä»»ä½•é›†åˆçš„å­é›†
 		return true;
 	}
 	if (vTsPart.size() == 1)
 	{
-		//²éÕÒÊÇ·ñ°üº¬¼´¿É
+		//æŸ¥æ‰¾æ˜¯å¦åŒ…å«å³å¯
 		return VectorContains(vTsSum, vTsPart[0]);
 	}
 	else
 	{
-		//Ò»Ò»¶ÔÓ¦²éÕÒ
+		//ä¸€ä¸€å¯¹åº”æŸ¥æ‰¾
 		const size_t nSumSize = vTsSum.size();
 		const size_t nPartSize = vTsPart.size();
 
@@ -222,9 +222,9 @@ inline bool CStdTpl::VectorContainsStrict(const std::vector<T>& vTsSum, const st
 			std::reverse(vTsPartBak.begin(), vTsPartBak.end());
 		}
 
-		//ÕÒ³öµÚÒ»¸öÔªËØÔÚÔ­À´ºÏ¼¯ÖĞµÚÒ»´Î³öÏÖµÄÎ»ÖÃ
+		//æ‰¾å‡ºç¬¬ä¸€ä¸ªå…ƒç´ åœ¨åŸæ¥åˆé›†ä¸­ç¬¬ä¸€æ¬¡å‡ºç°çš„ä½ç½®
 		int nSIndex = VectorFind(vTsSum, vTsPartBak[0]);
-		//ÕÒ³ö×îºóÒ»¸öÔªËØÔÚÔ­À´ºÏ¼¯ÖĞ·´ÏòµÚÒ»´Î³öÏÖµÄÎ»ÖÃ
+		//æ‰¾å‡ºæœ€åä¸€ä¸ªå…ƒç´ åœ¨åŸæ¥åˆé›†ä¸­åå‘ç¬¬ä¸€æ¬¡å‡ºç°çš„ä½ç½®
 		int nEIndex = VectorFind(vTsSum, vTsPartBak[vTsPartBak.size() - 1], false);
 
 		if (nSIndex == -1 || nEIndex == -1 || nSIndex >= nEIndex)
@@ -249,17 +249,17 @@ inline bool CStdTpl::VectorContainsStrictCircle(const std::vector<T>& vTsSum, co
 {
 	if (vTsPart.size() == 0)
 	{
-		//¿Õ¼¯ÊÇÈÎºÎ¼¯ºÏµÄ×Ó¼¯
+		//ç©ºé›†æ˜¯ä»»ä½•é›†åˆçš„å­é›†
 		return true;
 	}
 	if (vTsPart.size() == 1)
 	{
-		//²éÕÒÊÇ·ñ°üº¬¼´¿É
+		//æŸ¥æ‰¾æ˜¯å¦åŒ…å«å³å¯
 		return VectorContains(vTsSum, vTsPart[0]);
 	}
 	else
 	{
-		//Ò»Ò»¶ÔÓ¦²éÕÒ
+		//ä¸€ä¸€å¯¹åº”æŸ¥æ‰¾
 		const size_t nSumSize = vTsSum.size();
 		const size_t nPartSize = vTsPart.size();
 
@@ -274,9 +274,9 @@ inline bool CStdTpl::VectorContainsStrictCircle(const std::vector<T>& vTsSum, co
 			std::reverse(vTsPartBak.begin(), vTsPartBak.end());
 		}
 
-		//ÕÒ³öµÚÒ»¸öÔªËØÔÚÔ­À´ºÏ¼¯ÖĞµÚÒ»´Î³öÏÖµÄÎ»ÖÃ
+		//æ‰¾å‡ºç¬¬ä¸€ä¸ªå…ƒç´ åœ¨åŸæ¥åˆé›†ä¸­ç¬¬ä¸€æ¬¡å‡ºç°çš„ä½ç½®
 		int nSIndex = VectorFind(vTsSum, vTsPartBak[0]);
-		//ÕÒ³ö×îºóÒ»¸öÔªËØÔÚÔ­À´ºÏ¼¯ÖĞ·´ÏòµÚÒ»´Î³öÏÖµÄÎ»ÖÃ
+		//æ‰¾å‡ºæœ€åä¸€ä¸ªå…ƒç´ åœ¨åŸæ¥åˆé›†ä¸­åå‘ç¬¬ä¸€æ¬¡å‡ºç°çš„ä½ç½®
 		int nEIndex = VectorFind(vTsSum, vTsPartBak[vTsPartBak.size() - 1], false);
 
 		if (nSIndex == -1 || nEIndex == -1 || nSIndex == nEIndex)
@@ -296,7 +296,7 @@ inline bool CStdTpl::VectorContainsStrictCircle(const std::vector<T>& vTsSum, co
 		}
 		else
 		{
-			//¹«¹²±ß¿ÉÄÜ±»Ê×Î²µã½Ø¶Ï
+			//å…¬å…±è¾¹å¯èƒ½è¢«é¦–å°¾ç‚¹æˆªæ–­
 			int nTmpPos = 0;
 			for (int i = nSIndex; i < nSumSize && i - nSIndex < nPartSize; ++i)
 			{
@@ -348,12 +348,11 @@ inline int CStdTpl::VectorFind(const std::vector<T>& vTs, const T& value, bool b
 }
 
 template <class T>
-inline int CStdTpl::ConvertFromString(T &value, const std::string &s)
+inline void* CStdTpl::ConvertFromString(T &value, const std::string &s)
 {
 	std::stringstream ss(s);
-	ss >> value;
 
-	return 0;
+	return ss >> value;
 }
 
 template <class T>
