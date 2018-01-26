@@ -45,7 +45,7 @@ class CStdFile
 public:
 	//文件操作
 	static bool CompareFileDistinct(const std::string strLeftFile, const std::string strRightFile);
-	static bool CopyAFile(const std::string& strSrcFileName, std::string& strDstFileName, const bool& bFailIfExists);
+	static bool CopyAFile(const std::string& strSrcFileName, const std::string& strDstFileName, const bool& bFailIfExists);
 	static bool IfAccessFile(const std::string& strFilePath);
 	
 	static size_t ParseTXTFile(const std::string& strFilePath, std::list<std::string>& lContentInFile);
