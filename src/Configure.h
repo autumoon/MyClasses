@@ -11,29 +11,29 @@
 typedef struct _config_s 
 {
 	bool bRemPath;
-	std::vector<std::string> vDirPaths;
-	std::vector<std::string> vFilePaths;
+	std::vector<_tstring> vDirPaths;
+	std::vector<_tstring> vFilePaths;
 
 	_config_s()
 	{
-		//ƒ⁄≤ø≥ı ºªØ
+		//ÂÜÖÈÉ®ÂàùÂßãÂåñ
 		bRemPath = true;
 	}
 
 }config_s;
 
-int ReadIniFromFile(const std::string& strIniPath, config_s& _conf);
-int WriteIniToFile(const std::string& strIniPath, const config_s& _conf);
+int ReadIniFromFile(const _tstring& strIniPath, config_s& _conf);
+int WriteIniToFile(const _tstring& strIniPath, const config_s& _conf);
 
-std::wstring VectorToString(const std::vector<std::string>& vStrings);
+_tstring VectorToString(const std::vector<_tstring>& vStrings);
 
-//std::string GetIniPath()
+//_tstring GetIniPath()
 //{
 //TCHAR chpath[MAX_PATH];
 //GetModuleFileName(NULL, chpath, sizeof(chpath));
 
-//std::string strModulePath = CMfcStrFile::CString2string(chpath);
-//std::string strIniPath = CStdStr::ReplaceSuffix(strModulePath, ".ini");
+//_tstring strModulePath = CMfcStrFile::CString2string(chpath);
+//_tstring strIniPath = CStdStr::ReplaceSuffix(strModulePath, _T(".ini"));
 
 //return strIniPath;
 //}
