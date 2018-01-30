@@ -2,9 +2,9 @@
 //mail:autumoon@vip.qq.com
 #include "Configure.h"
 
-inline std::wstring VectorToString(const std::vector<std::string>& vStrings)
+inline _tstring VectorToString(const std::vector<_tstring>& vStrings)
 {
-	std::wstring strRes;
+	_tstring strRes;
 
 	const size_t num = vStrings.size();
 
@@ -12,17 +12,17 @@ inline std::wstring VectorToString(const std::vector<std::string>& vStrings)
 	{
 		for (size_t i = 0; i < num - 1; ++i)
 		{
-			const std::string& strCurItems = vStrings[i];
-			strRes += CStdStr::s2ws(strCurItems + '|');
+			const _tstring& strCurItems = vStrings[i];
+			strRes += strCurItems + _T('|');
 		}
 
-		strRes += CStdStr::s2ws(vStrings[vStrings.size() - 1]);
+		strRes += vStrings[vStrings.size() - 1];
 	}
 
 	return strRes;
 }
 
-int ReadIniFromFile(const std::string& strIniPath, config_s& _conf)
+int ReadIniFromFile(const _tstring& strIniPath, config_s& _conf)
 {
 	bool bRes = CStdFile::IfAccessFile(strIniPath.c_str());
 
@@ -30,17 +30,17 @@ int ReadIniFromFile(const std::string& strIniPath, config_s& _conf)
 	Ini.SetUnicode();
 	if (bRes)
 	{
-		//¶ÁÈ¡ÐÅÏ¢
+		//è¯»å–ä¿¡æ¯
 		Ini.LoadFile(strIniPath.c_str());
 		_conf.bRemPath = Ini.GetBoolValue(INI_PRESUFFIX, INI_REMPATH, _conf.bRemPath);
 
-		std::wstring strRootDirs = VectorToString(_conf.vDirPaths);
+		_tstring strRootDirs = VectorToString(_conf.vDirPaths);
 		strRootDirs = Ini.GetValue(INI_PRESUFFIX, INI_PATH_DIRS, strRootDirs.c_str());
-		_conf.vDirPaths = CStdStr::Split(CStdStr::ws2s(strRootDirs), "|");
+		_conf.vDirPaths = CStdStr::Split(strRootDirs, _T("|"));
 
-		std::wstring strAllDirs = VectorToString(_conf.vFilePaths);
+		_tstring strAllDirs = VectorToString(_conf.vFilePaths);
 		strAllDirs = Ini.GetValue(INI_PRESUFFIX, INI_PATH_FILES, strAllDirs.c_str());
-		_conf.vFilePaths = CStdStr::Split(CStdStr::ws2s(strAllDirs), "|");
+		_conf.vFilePaths = CStdStr::Split(strAllDirs, _T("|"));
 	}
 	else
 	{
@@ -51,7 +51,7 @@ int ReadIniFromFile(const std::string& strIniPath, config_s& _conf)
 	return 0;
 }
 
-int WriteIniToFile(const std::string& strIniPath, const config_s& _conf)
+int WriteIniToFile(const _tstring& strIniPath, const config_s& _conf)
 {
 	CSimpleIni Ini;
 	Ini.SetUnicode();
