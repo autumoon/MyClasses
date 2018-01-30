@@ -1,36 +1,28 @@
 #include "MfcStrFile.h"
 
-std::string CMfcStrFile::CString2string(const CString& strCstring)
+_tstring CMfcStrFile::CString2string(const CString& strCstring)
 {
-	const char* pChar = CStringToChar(strCstring);
-	std::string strDst(pChar);
+	const TCHAR* pChar = CStringToChar(strCstring);
+
+	_tstring strDst(pChar);
+
 	delete[] pChar;
 	pChar = nullptr;
 
 	return strDst;
 }
 
-char* CMfcStrFile::CStringToChar(const CString& strCstring)
+TCHAR* CMfcStrFile::CStringToChar(const CString& strCstring)
 {
 	CString strBak(strCstring);
-#ifdef _UNICODE
-	setlocale(LC_CTYPE, "chs");//设定支持中文路径
-	wchar_t *pWChar = strBak.GetBuffer(); //获取str的宽字符用数组保存  
-	strBak.ReleaseBuffer();
-	int nLen = strBak.GetLength(); //获取str的字符数  
-	char *pChar = new char[nLen * 2 + 1];
-	memset(pChar, 0, nLen * 2 + 1);
-	size_t i;
-	size_t rtnVal = wcstombs_s(&i, pChar, nLen * 2 + 1, pWChar, _TRUNCATE); //宽字符转换为多字节字符
-	setlocale(LC_ALL, "C"); //还原区域设定
 
-	return pChar; //注意此内存并未释放
-#else
-	char *pDst = new char[strBak.GetLength() + 1];
-	strcpy(pDst, strBak);
+	int nLen = (strBak.GetLength() + 1) * sizeof(TCHAR);
+	TCHAR* pChar = new TCHAR[nLen];
 
-	return pDst;
-#endif // _UNICODE
+	memset(pChar, 0, sizeof(TCHAR) * nLen);
+	memcpy(pChar, strBak.GetBuffer(), nLen - sizeof(TCHAR));
+
+	return pChar; //获取str的宽字符用数组保存  
 }
 
 CString CMfcStrFile::BrowseDir(const CString& strTips/* = CString("请选择文件夹")*/)
@@ -97,9 +89,9 @@ CString CMfcStrFile::OpenFile()
 	return szFileName;
 }
 
-CString CMfcStrFile::OpenSuffixFile(const std::string& strSuffix)
+CString CMfcStrFile::OpenSuffixFile(const _tstring& strSuffix)
 {
-	std::string strSuffixBak(strSuffix);
+	_tstring strSuffixBak(strSuffix);
 
 	if (strSuffixBak[0] == '.')
 	{
@@ -107,7 +99,8 @@ CString CMfcStrFile::OpenSuffixFile(const std::string& strSuffix)
 		strSuffixBak.erase(0, 1);
 	}
 
-	CFileDialog dlg(TRUE, NULL, NULL, OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT, CString((strSuffixBak + "文件（*." + strSuffixBak + ")|*." + strSuffixBak + "|所有文件(*.*)|*.*||").c_str()));
+	CFileDialog dlg(TRUE, NULL, NULL, OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT, CString((strSuffixBak + _T("文件（*.") + 
+		strSuffixBak + _T(")|*.") + strSuffixBak + _T("|所有文件(*.*)|*.*||")).c_str()));
 
 	CString szFileName("");
 
@@ -161,11 +154,11 @@ CString CMfcStrFile::OpenSuffixFile(const int& nSuffix, ...)
 	return szFileName;
 }
 
-CString CMfcStrFile::SaveSuffixFile(const std::string& strSuffix, const std::string& strDefaultName/* = "autumoon"*/)
+CString CMfcStrFile::SaveSuffixFile(const _tstring& strSuffix, const _tstring& strDefaultName/* = _T("autumoon")*/)
 {
 	CString sSuffix(strSuffix.c_str()), strFilePath;
 	size_t nIndex = strSuffix.rfind('.');
-	if (nIndex != std::string::npos)
+	if (nIndex != _tstring::npos)
 	{
 		sSuffix = sSuffix.Mid(int(nIndex + 1), sSuffix.GetLength() - int(nIndex) - 1);
 	}
@@ -184,13 +177,13 @@ CString CMfcStrFile::SaveSuffixFile(const std::string& strSuffix, const std::str
 	return strFilePath;
 }
 
-size_t CMfcStrFile::Split(const CString& str, CStringArray& Arr, const char& ch /*= ','*/)
+size_t CMfcStrFile::Split(const CString& str, CStringArray& Arr, const TCHAR& ch /*= ','*/)
 {
 	CString strTmp(str);
 	//为方便处理，添加一个ch
 	strTmp += ch;
 	int nFindposi  = strTmp.Find(ch);
-	while( nFindposi != std::string::npos)
+	while( nFindposi != _tstring::npos)
 	{
 		Arr.Add(strTmp.Left(nFindposi) );
 		strTmp = strTmp.Right( strTmp.GetLength() - nFindposi - 1);
