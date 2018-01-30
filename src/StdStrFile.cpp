@@ -1,21 +1,21 @@
 #include "StdStrFile.h"
 #include <fstream>
 
-inline bool CStdStr::IsFileContainsDir(const std::string& strFile, const std::string& strDir)
+inline bool CStdStr::IsFileContainsDir(const _tstring& strFile, const _tstring& strDir)
 {
-	std::string strFilePath = ToUpperLower(strFile);
+	_tstring strFilePath = ToUpperLower(strFile);
 	strFilePath = Trim(strFilePath);
-	std::string strDirPath = ToUpperLower(strDir);
+	_tstring strDirPath = ToUpperLower(strDir);
 	strDirPath = Trim(strDirPath);
 
 	return strFilePath.find(strDirPath) == 0;
 }
 
-inline bool CStdStr::IsFilesContainsDir(const std::vector<std::string>& vFiles, const std::string& strDir)
+inline bool CStdStr::IsFilesContainsDir(const std::vector<_tstring>& vFiles, const _tstring& strDir)
 {
 	for (int i = 0; i < vFiles.size(); ++i)
 	{
-		const std::string strCurFile = vFiles[i];
+		const _tstring strCurFile = vFiles[i];
 		if (!IsFileContainsDir(strCurFile, strDir))
 		{
 			return false;
@@ -25,9 +25,9 @@ inline bool CStdStr::IsFilesContainsDir(const std::vector<std::string>& vFiles, 
 	return true;
 }
 
-std::string CStdStr::AddSlashIfNeeded(const std::string& strDir, const char& cDir/* = '\\'*/)
+_tstring CStdStr::AddSlashIfNeeded(const _tstring& strDir, const TCHAR& cDir/* = '\\'*/)
 {
-	std::string strDirNew(strDir);
+	_tstring strDirNew(strDir);
 	if (strDir.length() > 0 && strDir[strDir.length() - 1] != cDir)
 	{
 		strDirNew += cDir;
@@ -41,15 +41,15 @@ std::string CStdStr::AddSlashIfNeeded(const std::string& strDir, const char& cDi
 	return strDirNew;
 }
 
-std::string CStdStr::GetDirOfDir(const std::string& strDir, const char& cDir/* = '\\'*/)
+_tstring CStdStr::GetDirOfDir(const _tstring& strDir, const TCHAR& cDir/* = '\\'*/)
 {
-	std::string strDirPath(strDir);
+	_tstring strDirPath(strDir);
 
 	strDirPath = TrimTail(strDirPath, cDir);
 
 	size_t index = strDirPath.rfind(cDir);
 
-	if (index != std::string::npos)
+	if (index != _tstring::npos)
 	{
 		return strDirPath.substr(0, index);
 	}
@@ -59,15 +59,15 @@ std::string CStdStr::GetDirOfDir(const std::string& strDir, const char& cDir/* =
 	}
 }
 
-std::string CStdStr::GetDirOfFile(const std::string& strFile, const char& cDir /*= '\\'*/)
+_tstring CStdStr::GetDirOfFile(const _tstring& strFile, const TCHAR& cDir /*= '\\'*/)
 {
-	std::string strFilePath(strFile);
+	_tstring strFilePath(strFile);
 
 	strFilePath = TrimTail(strFilePath, cDir);
 
 	size_t index = strFilePath.rfind(cDir);
 
-	if (index != std::string::npos)
+	if (index != _tstring::npos)
 	{
 		return strFilePath.substr(0, index);
 	}
@@ -77,9 +77,9 @@ std::string CStdStr::GetDirOfFile(const std::string& strFile, const char& cDir /
 	}
 }
 
-std::string CStdStr::GetFilesCommonDir(const std::vector<std::string>& vFilesFullPath)
+_tstring CStdStr::GetFilesCommonDir(const std::vector<_tstring>& vFilesFullPath)
 {
-	std::string strCommonDir;
+	_tstring strCommonDir;
 	if (vFilesFullPath.size() == 0)
 	{
 		return strCommonDir;
@@ -88,7 +88,7 @@ std::string CStdStr::GetFilesCommonDir(const std::vector<std::string>& vFilesFul
 	strCommonDir = vFilesFullPath[0];
 	do 
 	{
-		std::string strTmpDir = GetDirOfDir(strCommonDir);
+		_tstring strTmpDir = GetDirOfDir(strCommonDir);
 		if (strTmpDir != strCommonDir)
 		{
 			strCommonDir = strTmpDir;
@@ -96,7 +96,7 @@ std::string CStdStr::GetFilesCommonDir(const std::vector<std::string>& vFilesFul
 		else
 		{
 			break;
-			strCommonDir = "";
+			strCommonDir = _T("");
 		}
 
 	} while (!IsFilesContainsDir(vFilesFullPath, strCommonDir));
@@ -104,13 +104,13 @@ std::string CStdStr::GetFilesCommonDir(const std::vector<std::string>& vFilesFul
 	return strCommonDir;
 }
 
-std::string CStdStr::GetRootDir(const std::string& strDirOrFile, const char& cDir /*= '\\'*/)
+_tstring CStdStr::GetRootDir(const _tstring& strDirOrFile, const TCHAR& cDir /*= '\\'*/)
 {
-	std::string strPath(strDirOrFile);
+	_tstring strPath(strDirOrFile);
 	size_t nNot = strPath.find_first_not_of(cDir);
 	size_t index = strPath.find(cDir, nNot);
 
-	if (index != std::string::npos)
+	if (index != _tstring::npos)
 	{
 		return strPath.substr(0, index);
 	}
@@ -120,12 +120,12 @@ std::string CStdStr::GetRootDir(const std::string& strDirOrFile, const char& cDi
 	}
 }
 
-std::string CStdStr::GetSuffixOfFile(const std::string& strFile, bool bWithDot /*= true*/)
+_tstring CStdStr::GetSuffixOfFile(const _tstring& strFile, bool bWithDot /*= true*/)
 {
-	std::string strFileName = GetNameOfFile(strFile);
-	size_t index = strFileName.rfind(".");
+	_tstring strFileName = GetNameOfFile(strFile);
+	size_t index = strFileName.rfind(_T("."));
 
-	if (index != std::string::npos)
+	if (index != _tstring::npos)
 	{
 		if (bWithDot)
 		{
@@ -138,26 +138,26 @@ std::string CStdStr::GetSuffixOfFile(const std::string& strFile, bool bWithDot /
 	}
 	else
 	{
-		return "";
+		return _T("");
 	}
 }
 
-std::string CStdStr::GetNameOfDir(const std::string& strDir, const char& cDir /*= '\\'*/)
+_tstring CStdStr::GetNameOfDir(const _tstring& strDir, const TCHAR& cDir /*= '\\'*/)
 {
-	std::string strDirPath(strDir);
+	_tstring strDirPath(strDir);
 	strDirPath = TrimTail(strDirPath, cDir);
 	int index = (int)strDirPath.rfind('\\');
 
 	return strDirPath.substr(index + 1, strDirPath.length() - index - 1);
 }
 
-std::string CStdStr::Trim(const std::string& strOri, const char& cToTrim/* = ' '*/)
+_tstring CStdStr::Trim(const _tstring& strOri, const TCHAR& cToTrim/* = ' '*/)
 {
-	std::string text(strOri);
+	_tstring text(strOri);
 	if (!text.empty())
 	{
-		text.erase(0, text.find_first_not_of(" \n\r\t"));
-		text.erase(text.find_last_not_of(" \n\r\t") + 1);
+		text.erase(0, text.find_first_not_of(_T(" \n\r\t")));
+		text.erase(text.find_last_not_of(_T(" \n\r\t")) + 1);
 		text.erase(0, text.find_first_not_of(cToTrim));
 		text.erase(text.find_last_not_of(cToTrim) + 1);
 	}
@@ -165,9 +165,9 @@ std::string CStdStr::Trim(const std::string& strOri, const char& cToTrim/* = ' '
 	return text;
 }
 
-std::string CStdStr::TrimHead(const std::string& strOri, const char& cToTrim/* = ' '*/)
+_tstring CStdStr::TrimHead(const _tstring& strOri, const TCHAR& cToTrim/* = ' '*/)
 {
-	std::string s(strOri);
+	_tstring s(strOri);
 	size_t i = 0;
 	for (; i < s.length(); ++i)
 	{
@@ -179,9 +179,9 @@ std::string CStdStr::TrimHead(const std::string& strOri, const char& cToTrim/* =
 	return s;
 }
 
-std::string CStdStr::TrimTail(const std::string& strOri, const char& cToTrim/* = ' '*/)
+_tstring CStdStr::TrimTail(const _tstring& strOri, const TCHAR& cToTrim/* = ' '*/)
 {
-	std::string s(strOri);
+	_tstring s(strOri);
 	int i = (int)s.length() - 1;
 	for (; i > 0; --i)
 	{
@@ -194,10 +194,10 @@ std::string CStdStr::TrimTail(const std::string& strOri, const char& cToTrim/* =
 	return s;
 }
 
-std::string CStdStr::GetNameOfFile(const std::string& strFile, const bool& bWithSuffix /*= true*/, const char& cDir/* = '\\'*/)
+_tstring CStdStr::GetNameOfFile(const _tstring& strFile, const bool& bWithSuffix /*= true*/, const TCHAR& cDir/* = '\\'*/)
 {
 	int index = (int)strFile.rfind(cDir);
-	std::string strFileName = strFile.substr(index + 1, strFile.length() - index - 1);
+	_tstring strFileName = strFile.substr(index + 1, strFile.length() - index - 1);
 
 	if (bWithSuffix)
 	{
@@ -206,7 +206,7 @@ std::string CStdStr::GetNameOfFile(const std::string& strFile, const bool& bWith
 	else
 	{
 		size_t nIndexOfDot = strFileName.rfind('.');
-		if (nIndexOfDot == std::string::npos)
+		if (nIndexOfDot == _tstring::npos)
 		{
 			return strFileName;
 		}
@@ -217,18 +217,18 @@ std::string CStdStr::GetNameOfFile(const std::string& strFile, const bool& bWith
 	}
 }
 
-std::string CStdStr::RepalceAll(const std::string& strInput,const std::string& old_value,const std::string& new_value /*= ""*/)
+_tstring CStdStr::RepalceAll(const _tstring& strInput,const _tstring& old_value,const _tstring& new_value /*= _T("")*/)
 {
-	if (old_value == "")
+	if (old_value == _T(""))
 	{
 		return strInput;
 	}
 
-	std::string str(strInput);
+	_tstring str(strInput);
 	while(true)
 	{   
-		std::string::size_type pos(0);   
-		if((pos=str.find(old_value)) != std::string::npos)   
+		_tstring::size_type pos(0);   
+		if((pos=str.find(old_value)) != _tstring::npos)   
 			str.replace(pos,old_value.length(),new_value);
 		else
 			break;   
@@ -237,17 +237,17 @@ std::string CStdStr::RepalceAll(const std::string& strInput,const std::string& o
 	return str;   
 }   
 
-std::string CStdStr::ReplaceAllDistinct(const std::string& strInput,const std::string& old_value,const std::string& new_value /*= ""*/)
+_tstring CStdStr::ReplaceAllDistinct(const _tstring& strInput,const _tstring& old_value,const _tstring& new_value /*= _T("")*/)
 {
-	if (old_value == "")
+	if (old_value == _T(""))
 	{
 		return strInput;
 	}
 
-	std::string str(strInput);
-	for(std::string::size_type pos(0); pos != std::string::npos; pos += new_value.length())
+	_tstring str(strInput);
+	for(_tstring::size_type pos(0); pos != _tstring::npos; pos += new_value.length())
 	{   
-		if((pos=str.find(old_value,pos)) != std::string::npos)   
+		if((pos=str.find(old_value,pos)) != _tstring::npos)   
 			str.replace(pos,old_value.length(),new_value);   
 		else
 			break;   
@@ -256,11 +256,11 @@ std::string CStdStr::ReplaceAllDistinct(const std::string& strInput,const std::s
 	return   str;   
 }  
 
-std::string CStdStr::ReplaceSuffix(const std::string& strFilePath, const std::string& strNewSuffix)
+_tstring CStdStr::ReplaceSuffix(const _tstring& strFilePath, const _tstring& strNewSuffix)
 {
 	size_t nIndex = strFilePath.rfind('.');
 
-	if (nIndex != std::string::npos)
+	if (nIndex != _tstring::npos)
 	{
 		return strFilePath.substr(0, nIndex) + strNewSuffix;
 	}
@@ -271,12 +271,17 @@ std::string CStdStr::ReplaceSuffix(const std::string& strFilePath, const std::st
 }
 
 
-std::string CStdStr::ToUpperLower(const std::string& strOri, const bool& bToLower/* = true*/)
+_tstring CStdStr::ToUpperLower(const _tstring& strOri, const bool& bToLower/* = true*/)
 {
 	size_t len = strOri.length() + 1;
 	char* szDst = new char[len];
 	memset(szDst, 0, len);
+	
+#ifdef _UNICODE
+	strcpy_s(szDst, len, ws2s(strOri).c_str());
+#else
 	strcpy_s(szDst, len, strOri.c_str());
+#endif
 
 	int i = -1;
 
@@ -297,7 +302,11 @@ std::string CStdStr::ToUpperLower(const std::string& strOri, const bool& bToLowe
 		}
 	}
 
-	std::string strDst(szDst);
+#ifdef _UNICODE
+		_tstring strDst(CStdStr::s2ws(szDst));
+#else
+		_tstring strDst(szDst);
+#endif
 
 	delete[] szDst;
 	szDst = nullptr;
@@ -305,11 +314,11 @@ std::string CStdStr::ToUpperLower(const std::string& strOri, const bool& bToLowe
 	return strDst;
 }
 
-std::vector<std::string> CStdStr::Split(const std::string& str, const std::string& pattern)
+std::vector<_tstring> CStdStr::Split(const _tstring& str, const _tstring& pattern)
 {
-	std::string strBak(str);
-	std::string::size_type pos = std::string::npos;
-	std::vector<std::string> result;
+	_tstring strBak(str);
+	_tstring::size_type pos = _tstring::npos;
+	std::vector<_tstring> result;
 	//扩展字符串以方便操作
 	strBak += pattern;
 	size_t size = strBak.size();
@@ -317,9 +326,9 @@ std::vector<std::string> CStdStr::Split(const std::string& str, const std::strin
 	for (size_t i = 0; i < size; i++)
 	{
 		pos = strBak.find(pattern, i);
-		if (pos < size && pos != std::string::npos)
+		if (pos < size && pos != _tstring::npos)
 		{
-			std::string s = strBak.substr(i, pos - i);
+			_tstring s = strBak.substr(i, pos - i);
 			result.push_back(s);
 			i = pos + pattern.size() - 1;
 		}
@@ -335,7 +344,7 @@ std::vector<std::string> CStdStr::Split(const std::string& str, const std::strin
 std::string CStdStr::ws2s(const std::wstring& ws)
 {
 	size_t convertedChars=0;
-	std::string curLocale=setlocale(LC_ALL,NULL);
+	std::string curLocale= setlocale(LC_ALL,NULL);
 	setlocale(LC_ALL,"chs");
 	const wchar_t* wcs=ws.c_str();
 	size_t dByteNum=sizeof(wchar_t)*ws.size()+1;
@@ -366,13 +375,13 @@ std::wstring CStdStr::s2ws(const std::string& s)
 	return result;
 }
 
-bool CStdDir::CreateDir(const std::string& strDir, const char& cDir/* = '\\'*/)
+bool CStdDir::CreateDir(const _tstring& strDir, const TCHAR& cDir/* = '\\'*/)
 {
 	int m = 0, n;
-	std::string str1, str2;
-
-	str1 = strDir;
+	_tstring str1, str2;
+	
 	str2 = str1.substr( 0, 2 );
+
 	if (str1.length() > 3)
 	{
 		str1 = str1.substr( 3, str1.size() );
@@ -381,17 +390,24 @@ bool CStdDir::CreateDir(const std::string& strDir, const char& cDir/* = '\\'*/)
 	{
 		return true;
 	}
-	str1 = str1.substr( 3, str1.size() );
 
 	while( m >= 0 )
 	{
 		m = int(str1.find(cDir));
 
 		str2 += cDir + str1.substr( 0, m );    
+#ifdef _UNICODE
+		n = _access(CStdStr::ws2s(str2).c_str(), 0 ); //判断该目录是否存在
+#else
 		n = _access( str2.c_str(), 0 ); //判断该目录是否存在
+#endif
 		if( n == -1 )
 		{
+#ifdef _UNICODE
+			if (_mkdir( CStdStr::ws2s(str2).c_str()) != 0)
+#else
 			if (_mkdir( str2.c_str()) != 0)
+#endif
 			{
 				//创建失败
 				return false;
@@ -404,7 +420,7 @@ bool CStdDir::CreateDir(const std::string& strDir, const char& cDir/* = '\\'*/)
 	return true;
 }
 
-bool CStdFile::IfAccessFile(const std::string& strFilePath)
+bool CStdFile::IfAccessFile(const _tstring& strFilePath)
 {
 	std::fstream _file;
 	_file.open(strFilePath, std::ios::in);
@@ -414,7 +430,7 @@ bool CStdFile::IfAccessFile(const std::string& strFilePath)
 	return bRes;
 }
 
-bool CStdFile::CompareFileDistinct(const std::string strLeftFile, const std::string strRightFile)
+bool CStdFile::CompareFileDistinct(const _tstring strLeftFile, const _tstring strRightFile)
 {
 	__int64 nSizel = GetFileSize(strLeftFile);
 	__int64 nSizer = GetFileSize(strRightFile);
@@ -428,8 +444,14 @@ bool CStdFile::CompareFileDistinct(const std::string strLeftFile, const std::str
 	//文件大小相同的时候，逐个字节比较
 	int chl = -1, chr = -1;
 	FILE* fpl = nullptr, *fpr = nullptr;
+
+#ifdef UNICODE
+	errno_t erl = fopen_s(&fpl, CStdStr::ws2s(strLeftFile).c_str(),"rb");
+	errno_t err = fopen_s(&fpr, CStdStr::ws2s(strRightFile).c_str(),"rb");
+#else
 	errno_t erl = fopen_s(&fpl, strLeftFile.c_str(),"rb");
 	errno_t err = fopen_s(&fpr, strRightFile.c_str(),"rb");
+#endif
 
 	//任意文件无法打开则返回false
 	if (erl != 0 || erl != 0)
@@ -451,16 +473,16 @@ bool CStdFile::CompareFileDistinct(const std::string strLeftFile, const std::str
 	return true;
 }
 
-bool CStdFile::CopyAFile(const std::string& strSrcFileName, const std::string& strDstFileName, const bool& bFailIfExists)
+bool CStdFile::CopyAFile(const _tstring& strSrcFileName, const _tstring& strDstFileName, const bool& bFailIfExists)
 {
 	//如果源文件和目标文件相同，则直接返回true
 	if (strSrcFileName == strDstFileName)
 	{
 		return true;
 	}
-	
+
 	//如果目标目录不存在，则创建目录
-	std::string strDir = CStdStr::GetDirOfFile(strDstFileName);
+	_tstring strDir = CStdStr::GetDirOfFile(strDstFileName);
 	if (CStdDir::CreateDir(strDir) == false)
 	{
 		return false;
@@ -497,7 +519,7 @@ bool CStdFile::CopyAFile(const std::string& strSrcFileName, const std::string& s
 	return true;
 }
 
-size_t CStdFile::ParseTXTFile(const std::string& strFilePath, std::list<std::string>& lContentInFile)
+size_t CStdFile::ParseTXTFile(const _tstring& strFilePath, std::list<_tstring>& lContentInFile)
 {
 	lContentInFile.clear();
 	std::ifstream in(strFilePath);
@@ -507,7 +529,11 @@ size_t CStdFile::ParseTXTFile(const std::string& strFilePath, std::list<std::str
 	{
 		while (getline(in, line)) // line中不包括每行的换行符  
 		{
+#ifdef _UNICODE
+			lContentInFile.push_back(CStdStr::s2ws(line));
+#else
 			lContentInFile.push_back(line);
+#endif
 		}
 	}
 	in.close();
@@ -515,7 +541,7 @@ size_t CStdFile::ParseTXTFile(const std::string& strFilePath, std::list<std::str
 	return lContentInFile.size();
 }
 
-size_t CStdFile::ParseTXTFile(const std::string& strFilePath, std::vector<std::string>& vContentInFile)
+size_t CStdFile::ParseTXTFile(const _tstring& strFilePath, std::vector<_tstring>& vContentInFile)
 {
 	vContentInFile.clear();
 	std::ifstream in(strFilePath);
@@ -525,7 +551,11 @@ size_t CStdFile::ParseTXTFile(const std::string& strFilePath, std::vector<std::s
 	{
 		while (getline(in, line)) // line中不包括每行的换行符  
 		{
+#ifdef _UNICODE
+			vContentInFile.push_back(CStdStr::s2ws(line));
+#else
 			vContentInFile.push_back(line);
+#endif // _UNICODE
 		}
 	}
 
@@ -534,7 +564,7 @@ size_t CStdFile::ParseTXTFile(const std::string& strFilePath, std::vector<std::s
 	return vContentInFile.size();
 }
 
-int CStdFile::SaveTXTFile(const std::string& strTxtPath, std::list<std::string>& lContent, bool bAppend /*= false*/)
+int CStdFile::SaveTXTFile(const _tstring& strTxtPath, std::list<_tstring>& lContent, bool bAppend /*= false*/)
 {
 	std::ofstream file;
 	if (bAppend)
@@ -546,16 +576,20 @@ int CStdFile::SaveTXTFile(const std::string& strTxtPath, std::list<std::string>&
 		file.open(strTxtPath, std::ios::in | std::ios::out | std::ios::trunc);
 	}
 
-	for (std::list<std::string>::iterator it = lContent.begin(); it != lContent.end(); ++it)
+	for (std::list<_tstring>::iterator it = lContent.begin(); it != lContent.end(); ++it)
 	{
-		file << *it;
+#ifdef _UNICODE
+	file << CStdStr::ws2s(*it);
+#else
+	file << *it;
+#endif
 	}
 	file.close();
 
 	return 0;
 }
 
-int CStdFile::SaveTXTFile(const std::string& strTxtPath, std::vector<std::string>& vContent, bool bAppend /*= false*/)
+int CStdFile::SaveTXTFile(const _tstring& strTxtPath, std::vector<_tstring>& vContent, bool bAppend /*= false*/)
 {
 	std::ofstream file;
 	if (bAppend)
@@ -567,16 +601,20 @@ int CStdFile::SaveTXTFile(const std::string& strTxtPath, std::vector<std::string
 		file.open(strTxtPath, std::ios::in | std::ios::out | std::ios::trunc);
 	}
 
-	for (std::vector<std::string>::iterator it = vContent.begin(); it != vContent.end(); ++it)
+	for (std::vector<_tstring>::iterator it = vContent.begin(); it != vContent.end(); ++it)
 	{
-		file << *it;
+#ifdef _UNICODE
+	file << CStdStr::ws2s(*it);
+#else
+	file << *it;
+#endif
 	}
 	file.close();
 
 	return 0;
 }
 
-int CStdFile::SaveTXTFile(const std::string& strTxtPath, const std::string& strLine, bool bAppend /*= false*/)
+int CStdFile::SaveTXTFile(const _tstring& strTxtPath, const _tstring& strLine, bool bAppend /*= false*/)
 {
 	std::ofstream file;
 	if (bAppend)
@@ -588,19 +626,27 @@ int CStdFile::SaveTXTFile(const std::string& strTxtPath, const std::string& strL
 		file.open(strTxtPath, std::ios::in | std::ios::out | std::ios::trunc);
 	}
 
+#ifdef UNICODE
+	file << CStdStr::ws2s(strLine);
+#else
 	file << strLine;
+#endif
 
 	file.close();
 
 	return 0;
 }
 
-__int64 CStdFile::GetFileSize(const std::string& strFilePath)
+__int64 CStdFile::GetFileSize(const _tstring& strFilePath)
 {
 	_finddatai64_t filefind;
 	size_t handle;
 	__int64 fs = -1;
+#ifdef _UNICODE
+	if((handle=_findfirsti64(CStdStr::ws2s(strFilePath).c_str() ,&filefind)) == -1)
+#else
 	if((handle=_findfirsti64(strFilePath.c_str() ,&filefind)) == -1)
+#endif // _UNICODE
 		return -1;
 
 	if   (!(_A_SUBDIR== (_A_SUBDIR & filefind.attrib)))
