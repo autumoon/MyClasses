@@ -5,55 +5,70 @@
 #include <sstream>
 #include <direct.h>		//_mkdir函数的头文件
 #include <io.h>
+#include <tchar.h>
+
+#ifdef _UNICODE
+
+#ifndef _tstring
+#define _tstring std::wstring
+#endif // _tstring
+
+#else
+
+#ifndef _tstring
+#define _tstring std::string
+#endif // _tstring
+
+#endif
 
 class CStdStr
 {
 public:
 	//字符操作
-	static bool IsFileContainsDir(const std::string& strFile, const std::string& strDir);
-	static bool IsFilesContainsDir(const std::vector<std::string>& vFiles, const std::string& strDir);
-	static std::string AddSlashIfNeeded(const std::string& strDir, const char& cDir = '\\');
-	static std::string GetDirOfDir(const std::string& strDir, const char& cDir = '\\');
-	static std::string GetDirOfFile(const std::string& strFile, const char& cDir = '\\');
-	static std::string GetFilesCommonDir(const std::vector<std::string>& vFilesFullPath);
-	static std::string GetRootDir(const std::string& strDirOrFile, const char& cDir = '\\');
-	static std::string GetSuffixOfFile(const std::string& strFile, bool bWithDot = true);
-	static std::string GetNameOfDir(const std::string& strDir, const char& cDir = '\\');
-	static std::string GetNameOfFile(const std::string& strFile, const bool& bWithSuffix = true, const char& cDir = '\\');
-	static std::string RepalceAll(const std::string& str,const std::string& old_value,const std::string& new_value = "");
-	static std::string ReplaceAllDistinct(const std::string& str,const std::string& old_value,const std::string& new_value = "");
-	static std::string ReplaceSuffix(const std::string& strFilePath, const std::string& strNewSuffix);
-	static std::string ToUpperLower(const std::string& strOri, const bool& bToLower = true);
-	static std::string Trim(const std::string& strOri, const char& cToTrim = ' ');
-	static std::string TrimHead(const std::string& strOri, const char& cToTrim = ' ');
-	static std::string TrimTail(const std::string& strOri, const char& cToTrim = ' ');
+	static bool IsFileContainsDir(const _tstring& strFile, const _tstring& strDir);
+	static bool IsFilesContainsDir(const std::vector<_tstring>& vFiles, const _tstring& strDir);
+	static _tstring AddSlashIfNeeded(const _tstring& strDir, const TCHAR& cDir = '\\');
+	static _tstring GetDirOfDir(const _tstring& strDir, const TCHAR& cDir = '\\');
+	static _tstring GetDirOfFile(const _tstring& strFile, const TCHAR& cDir = '\\');
+	static _tstring GetFilesCommonDir(const std::vector<_tstring>& vFilesFullPath);
+	static _tstring GetRootDir(const _tstring& strDirOrFile, const TCHAR& cDir = '\\');
+	static _tstring GetSuffixOfFile(const _tstring& strFile, bool bWithDot = true);
+	static _tstring GetNameOfDir(const _tstring& strDir, const TCHAR& cDir = '\\');
+	static _tstring GetNameOfFile(const _tstring& strFile, const bool& bWithSuffix = true, const TCHAR& cDir = '\\');
+	static _tstring RepalceAll(const _tstring& str,const _tstring& old_value,const _tstring& new_value = _T(""));
+	static _tstring ReplaceAllDistinct(const _tstring& str,const _tstring& old_value,const _tstring& new_value = _T(""));
+	static _tstring ReplaceSuffix(const _tstring& strFilePath, const _tstring& strNewSuffix);
+	static _tstring ToUpperLower(const _tstring& strOri, const bool& bToLower = true);
+	static _tstring Trim(const _tstring& strOri, const TCHAR& cToTrim = ' ');
+	static _tstring TrimHead(const _tstring& strOri, const TCHAR& cToTrim = ' ');
+	static _tstring TrimTail(const _tstring& strOri, const TCHAR& cToTrim = ' ');
 	static std::string ws2s(const std::wstring& ws);
 	static std::wstring s2ws(const std::string& s);
 
-	static std::vector<std::string> Split(const std::string& str, const std::string& pattern);
+	static std::vector<_tstring> Split(const _tstring& str, const _tstring& pattern);
 };
 
 class CStdDir
 {
 public:
-	static bool IfAccessDir(const std::string& strDirPath);
-	static bool CreateDir(const std::string& strDir, const char& cDir = '\\');
+	static bool IfAccessDir(const _tstring& strDirPath);
+	static bool CreateDir(const _tstring& strDir, const TCHAR& cDir = '\\');
 };
 
 class CStdFile
 {
 public:
 	//文件操作
-	static bool CompareFileDistinct(const std::string strLeftFile, const std::string strRightFile);
-	static bool CopyAFile(const std::string& strSrcFileName, const std::string& strDstFileName, const bool& bFailIfExists);
-	static bool IfAccessFile(const std::string& strFilePath);
+	static bool CompareFileDistinct(const _tstring strLeftFile, const _tstring strRightFile);
+	static bool CopyAFile(const _tstring& strSrcFileName, const _tstring& strDstFileName, const bool& bFailIfExists);
+	static bool IfAccessFile(const _tstring& strFilePath);
 	
-	static size_t ParseTXTFile(const std::string& strFilePath, std::list<std::string>& lContentInFile);
-	static size_t ParseTXTFile(const std::string& strFilePath, std::vector<std::string>& vContentInFile);
-	static int SaveTXTFile(const std::string& strTxtPath, std::list<std::string>& lContent, bool bAppend = false);
-	static int SaveTXTFile(const std::string& strTxtPath, std::vector<std::string>& vContent, bool bAppend = false);
-	static int SaveTXTFile(const std::string& strTxtPath, const std::string& strLine, bool bAppend = false);
-	static __int64 GetFileSize(const std::string& strFilePath);
+	static size_t ParseTXTFile(const _tstring& strFilePath, std::list<_tstring>& lContentInFile);
+	static size_t ParseTXTFile(const _tstring& strFilePath, std::vector<_tstring>& vContentInFile);
+	static int SaveTXTFile(const _tstring& strTxtPath, std::list<_tstring>& lContent, bool bAppend = false);
+	static int SaveTXTFile(const _tstring& strTxtPath, std::vector<_tstring>& vContent, bool bAppend = false);
+	static int SaveTXTFile(const _tstring& strTxtPath, const _tstring& strLine, bool bAppend = false);
+	static __int64 GetFileSize(const _tstring& strFilePath);
 };
 
 class CStdTpl
@@ -83,9 +98,9 @@ public:
 	template <class T>
 	static int VectorFind(const std::vector<T>& vTs, const T& value, bool bPositiveGoing = true);
 	template <class T>
-	static void* CStdTpl::ConvertFromString(T &value, const std::string &s)
+	static void* ConvertFromString(T &value, const _tstring &s);
 	template <class T>
-	static std::string ConvertToString(T value);
+	static _tstring ConvertToString(T value);
 
 private:
 	template <class T>
@@ -95,9 +110,13 @@ private:
 };
 
 /***********************内联或者模板实现***********************/
-inline bool CStdDir::IfAccessDir(const std::string& strDirPath)
+inline bool CStdDir::IfAccessDir(const _tstring& strDirPath)
 {
+#ifdef _UNICODE
+	return _access(CStdStr::ws2s(strDirPath).c_str(), 0) == 0 && !CStdFile::IfAccessFile(strDirPath);
+#else
 	return _access(strDirPath.c_str(), 0) == 0 && !CStdFile::IfAccessFile(strDirPath);
+#endif // _UNICODE
 }
 
 template <class T>
@@ -348,27 +367,37 @@ inline int CStdTpl::VectorFind(const std::vector<T>& vTs, const T& value, bool b
 }
 
 template <class T>
-inline void* CStdTpl::ConvertFromString(T &value, const std::string &s)
+inline void* CStdTpl::ConvertFromString(T &value, const _tstring &s)
 {
-	std::stringstream ss(s);
+	_tstringstream ss(s);
 
 	return ss >> value;
 }
 
 template <class T>
-inline std::string CStdTpl::ConvertToString(T value)
+inline _tstring CStdTpl::ConvertToString(T value)
 {
+#ifdef _UNICODE
+	std::wstringstream ss;
+#else
 	std::stringstream ss;
+#endif
+	
 	ss << value;
 
 	return ss.str();
 }
 
-inline std::string ToString(const double& dValue, const int& nLenDec = 6)
+inline _tstring ToString(const double& dValue, const int& nLenDec = 6)
 {
 	char tmp[256];
-	std::string strFormat = "%." + CStdTpl::ConvertToString(nLenDec) + "lf";
-	sprintf_s(tmp,strFormat.c_str(), dValue);
+	_tstring strFormat = _T("%.") + CStdTpl::ConvertToString(nLenDec) + _T("lf");
 
-	return std::string(tmp);
+#ifdef _UNICODE
+	sprintf_s(tmp, CStdStr::ws2s(strFormat).c_str(), dValue);
+	return CStdStr::s2ws(tmp);
+#else
+	sprintf_s(tmp, strFormat.c_str(), dValue);
+	return _tstring(tmp);
+#endif
 }
