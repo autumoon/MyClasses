@@ -378,7 +378,7 @@ std::wstring CStdStr::s2ws(const std::string& s)
 bool CStdDir::CreateDir(const _tstring& strDir, const TCHAR& cDir/* = '\\'*/)
 {
 	int m = 0, n;
-	_tstring str1, str2;
+	_tstring str1(strDir), str2;
 	
 	str2 = str1.substr( 0, 2 );
 
