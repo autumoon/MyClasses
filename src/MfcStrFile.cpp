@@ -93,7 +93,7 @@ CString CMfcStrFile::OpenSuffixFile(const _tstring& strSuffix)
 {
 	_tstring strSuffixBak(strSuffix);
 
-	if (strSuffixBak[0] == '.')
+	if (strSuffixBak.length() > 0 && strSuffixBak[0] == '.')
 	{
 		//delete the '.' before suffix
 		strSuffixBak.erase(0, 1);
