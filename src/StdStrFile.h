@@ -369,7 +369,11 @@ inline int CStdTpl::VectorFind(const std::vector<T>& vTs, const T& value, bool b
 template <class T>
 inline void* CStdTpl::ConvertFromString(T &value, const _tstring &s)
 {
-	_tstringstream ss(s);
+#ifdef _UNICODE
+	std::wstringstream ss(s);
+#else
+	std::stringstream ss(s);
+#endif
 
 	return ss >> value;
 }
