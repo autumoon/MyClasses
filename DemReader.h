@@ -4,7 +4,8 @@
 /* author: autumoon */
 
 #pragma once
-#include "StrDirFileU.h"
+#include "StdStrFile.h"
+#include "MfcStrFile.h"
 #include "gdalUser.h"
 #include <atlimage.h>
 
@@ -38,7 +39,6 @@ public:
 
 private:
 	const CString m_strDemPath;
-	CStrDirFile sdf;
 
 public:
 	char* m_DataMark;

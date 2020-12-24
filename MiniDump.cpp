@@ -20,9 +20,8 @@ inline BOOL IsDataSectionNeeded(const WCHAR* pModuleName)
 	return FALSE;
 }
 
-inline BOOL CALLBACK MiniDumpCallback(PVOID                            pParam,
-	const PMINIDUMP_CALLBACK_INPUT   pInput,
-	PMINIDUMP_CALLBACK_OUTPUT        pOutput)
+inline BOOL CALLBACK MiniDumpCallback(PVOID  pParam, const PMINIDUMP_CALLBACK_INPUT   pInput,
+	PMINIDUMP_CALLBACK_OUTPUT pOutput)
 {
 	if (pInput == 0 || pOutput == 0)
 		return FALSE;

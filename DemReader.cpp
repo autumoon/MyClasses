@@ -19,10 +19,12 @@ CDemReader::~CDemReader()
 	if (m_DataMark)
 	{
 		delete[]m_DataMark;
+		m_DataMark = nullptr;
 	}
 	if (m_Unit)
 	{
 		delete[]m_Unit;
+		m_Unit = nullptr;
 	}
 }
 
@@ -34,7 +36,7 @@ bool CDemReader::CheckData(const double& dData)
 int CDemReader::ReadDemData()
 {
 	FILE *fp;
-	const char* lpszFileName = sdf.CString2Char(m_strDemPath);
+	const char* lpszFileName = CStdStr::ws2s(CMfcStrFile::CString2string(m_strDemPath)).c_str();
 	fopen_s(&fp, lpszFileName, "rt");
 	if (fp == NULL)
 	{
@@ -91,21 +93,21 @@ int CDemReader::ReadDemData()
 
 int CDemReader::SaveDemData(const CString& strDem)
 {
-	std::list<CString> lOutput;
-	lOutput.push_back(CString(m_DataMark) + '\n');
-	lOutput.push_back(sdf.Float2Cstring(m_Version, 1) + '\n');
-	lOutput.push_back(CString(m_Unit) + '\n');
-	lOutput.push_back(sdf.Float2Cstring(m_Alfa, 4) + '\n');
-	lOutput.push_back(sdf.Float2Cstring(m_Beta, 4) + '\n');
-	lOutput.push_back(sdf.Float2Cstring(m_lfStartX) + '\n');
-	lOutput.push_back(sdf.Float2Cstring(m_lfStartY) + '\n');
-	lOutput.push_back(sdf.Float2Cstring(m_lfDx) + '\n');
-	lOutput.push_back(sdf.Float2Cstring(m_lfDy) + '\n');
-	lOutput.push_back(sdf.Int2Cstring(m_nRow) + '\n');
-	lOutput.push_back(sdf.Int2Cstring(m_nColumn) + '\n');
-	lOutput.push_back(sdf.Int2Cstring(m_nScale));
+	std::list<_tstring> lOutput;
+	lOutput.push_back(CMfcStrFile::CString2string(m_DataMark) + _T('\n'));
+	lOutput.push_back(ToString(m_Version, 1) + _T('\n'));
+	lOutput.push_back(CStdStr::s2ws(m_Unit) + _T('\n'));
+	lOutput.push_back(ToString(m_Alfa, 4) + _T('\n'));
+	lOutput.push_back(ToString(m_Beta, 4) + _T('\n'));
+	lOutput.push_back(ToString(m_lfStartX) + _T('\n'));
+	lOutput.push_back(ToString(m_lfStartY) + _T('\n'));
+	lOutput.push_back(ToString(m_lfDx) + _T('\n'));
+	lOutput.push_back(ToString(m_lfDy) + _T('\n'));
+	lOutput.push_back(CStdTpl::ConvertToString(m_nRow) + _T('\n'));
+	lOutput.push_back(CStdTpl::ConvertToString(m_nColumn) + _T('\n'));
+	lOutput.push_back(CStdTpl::ConvertToString(m_nScale));
 
-	CString strLine;
+	_tstring strLine;
 
 	for (int i = 0; i < m_nRow; i++)
 	{
@@ -113,17 +115,17 @@ int CDemReader::SaveDemData(const CString& strDem)
 		{
 			if (j % 10 == 0)
 			{
-				strLine += '\n';
+				strLine += _T('\n');
 				lOutput.push_back(strLine);
-				strLine = "";
+				strLine = _T("");
 			}
 
 			if (CheckData(m_pHeight[i][j]))
 			{
-				strLine += sdf.Int2Cstring(m_pHeight[i][j] * m_nScale) + _T(" ");
+				strLine += CStdTpl::ConvertToString(m_pHeight[i][j] * m_nScale) + _T(" ");
 			}
 			else
-				strLine += sdf.Int2Cstring(m_pHeight[i][j]) + _T(" ");
+				strLine += CStdTpl::ConvertToString(m_pHeight[i][j]) + _T(" ");
 		}
 	}
 	
@@ -131,9 +133,9 @@ int CDemReader::SaveDemData(const CString& strDem)
 	//增加最后一行
 	strLine += '\n';
 	lOutput.push_back(strLine);
-	strLine = "";
+	strLine = _T("");
 
-	sdf.SaveTXTFile(strDem, lOutput);
+	CStdFile::SaveTXTFile(CMfcStrFile::CString2string(strDem), lOutput);
 	
 	return 0;
 }
@@ -144,21 +146,21 @@ int CDemReader::CreateNewDem(const CString& strDemPath, const double& dStartX, c
 	const CString& strDataMark /*= _T("NSDTF-DEM")*/, const float& fVersion /*= 1.0*/, const CString& strUnit /*= _T("M")*/,
 	const float& fAlfa /*= 0.000*/, const float& fBeta /*= 0.0000*/)
 {
-	std::list<CString> lOutput;
-	lOutput.push_back(CString(strDataMark) + '\n');
-	lOutput.push_back(sdf.Float2Cstring(fVersion, 1) + '\n');
-	lOutput.push_back(CString(m_Unit) + '\n');
-	lOutput.push_back(sdf.Float2Cstring(fAlfa, 4) + '\n');
-	lOutput.push_back(sdf.Float2Cstring(fBeta, 4) + '\n');
-	lOutput.push_back(sdf.Float2Cstring(dStartX) + '\n');
-	lOutput.push_back(sdf.Float2Cstring(dStartY) + '\n');
-	lOutput.push_back(sdf.Float2Cstring(dDx) + '\n');
-	lOutput.push_back(sdf.Float2Cstring(dDy) + '\n');
-	lOutput.push_back(sdf.Int2Cstring(nRow) + '\n');
-	lOutput.push_back(sdf.Int2Cstring(nColumn) + '\n');
-	lOutput.push_back(sdf.Int2Cstring(nScale));
+	std::list<_tstring> lOutput;
+	lOutput.push_back(CMfcStrFile::CString2string(strDataMark) + _T('\n'));
+	lOutput.push_back(ToString(fVersion, 1) + _T('\n'));
+	lOutput.push_back(CStdStr::s2ws(m_Unit) + _T('\n'));
+	lOutput.push_back(ToString(fAlfa, 4) + _T('\n'));
+	lOutput.push_back(ToString(fBeta, 4) + _T('\n'));
+	lOutput.push_back(ToString(dStartX) + _T('\n'));
+	lOutput.push_back(ToString(dStartY) + _T('\n'));
+	lOutput.push_back(ToString(dDx) + _T('\n'));
+	lOutput.push_back(ToString(dDy) + _T('\n'));
+	lOutput.push_back(CStdTpl::ConvertToString(nRow) + _T('\n'));
+	lOutput.push_back(CStdTpl::ConvertToString(nColumn) + _T('\n'));
+	lOutput.push_back(CStdTpl::ConvertToString(nScale));
 
-	CString strLine;
+	_tstring strLine;
 
 	for (int i = 0; i < m_nRow; i++)
 	{
@@ -166,39 +168,41 @@ int CDemReader::CreateNewDem(const CString& strDemPath, const double& dStartX, c
 		{
 			if (j % 10 == 0)
 			{
-				strLine += '\n';
+				strLine += _T('\n');
 				lOutput.push_back(strLine);
-				strLine = "";
+				strLine = _T("");
 			}
-			strLine += sdf.Int2Cstring(NoData) + _T(" ");
+			strLine += CStdTpl::ConvertToString(NoData) + _T(" ");
 		}
 	}
 
 	//增加最后一行
 	strLine += '\n';
 	lOutput.push_back(strLine);
-	strLine = "";
+	strLine = _T("");
 
-	sdf.SaveTXTFile(strDemPath, lOutput);
+	CStdFile::SaveTXTFile(CMfcStrFile::CString2string(strDemPath), lOutput);
 
 	return 0;
 }
 
 int CDemReader::CreateDemByPic(const CString& strPicPath)
 {
-	CGdalUser gu(strPicPath);
-	//gu.Initialnize();
+	CGdalUser gu;
+	gu.m_strFilePath = CStdStr::ws2s(CMfcStrFile::CString2string(strPicPath));
+	gu.InitializeRead(gu.m_strFilePath.c_str());
 
 	double dStartX = 0;
 	double dStartY = 0;
 	//在每个像素之间的距离代表1m的时候，不需要通过tfw文件更新参数
-	m_nRow = gu.m_nRasterYSize / 5;
-	m_nColumn = gu.m_nRasterXSize / 5;
+	m_nRow = gu.m_nImgHeight / 5;
+	m_nColumn = gu.m_nImgWidth / 5;
 
-	CString strTfwPath = sdf.GetDirOfFile(strPicPath) + "\\" + sdf.GetNameOfFile(strPicPath, false) + _T(".tfw");
-	CString strDemPath = sdf.GetDirOfFile(strPicPath) + "\\" + sdf.GetNameOfFile(strPicPath, false) + _T(".dem");
+	_tstring sPicPath = CMfcStrFile::CString2string(strPicPath);
+	CString strTfwPath = (CStdStr::GetDirOfFile(sPicPath) + _T("\\") + CStdStr::GetNameOfFile(sPicPath, false) + _T(".tfw")).c_str();
+	CString strDemPath = (CStdStr::GetDirOfFile(sPicPath) + _T("\\") + CStdStr::GetNameOfFile(sPicPath, false) + _T(".dem")).c_str();
 
-	if (sdf.IfExistFile(strTfwPath))
+	if (CStdFile::IfAccessFile(CMfcStrFile::CString2string(strTfwPath)))
 	{
 		//存在tfw文件的时候，需要更新参数
 	}
@@ -260,7 +264,7 @@ int CDemReader::CreateBmpByDem(const CString& strDemPath, const CString& strBmpP
 			if (CheckData(m_pHeight[j][i]))
 			{
 				double dGray = (m_pHeight[j][i] - dMinHeight) / (dMaxHeight - dMinHeight) * 255;
-				image->SetPixelRGB(i, j, dGray, dGray, dGray);
+				image->SetPixelRGB(i, j, (BYTE)dGray, (BYTE)dGray, (BYTE)dGray);
 			}
 			else
 			{
